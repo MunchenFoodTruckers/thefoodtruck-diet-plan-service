@@ -8,16 +8,40 @@ datasource db {
 }
 
 model DietPlan {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  tags        String[] // vegan, vegetarian, keto, etc
-  createdAt   DateTime @default(now())
+  id             String   @id @default(uuid())
+  userId         String
+  name           String
+  goal           String   // weight_loss, muscle_gain, maintenance
+  targetCalories Int
+  targetProtein  Int
+  targetCarbs    Int
+  targetFat      Int
+  isActive       Boolean  @default(false)
+  meals          Meal[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
-model DietPreference {
+model Meal {
+  id           String   @id @default(uuid())
+  dietPlanId   String
+  dietPlan     DietPlan @relation(fields: [dietPlanId], references: [id], onDelete: Cascade)
+  dayOfWeek    Int      // 0-6 (Sunday-Saturday)
+  mealType     String   // breakfast, lunch, dinner, snack
+  menuItemId   String
+  menuItemName String
+  calories     Int
+  protein      Int
+  carbs        Int
+  fat          Int
+  createdAt    DateTime @default(now())
+}
+
+model DietaryPreference {
   id          String   @id @default(uuid())
-  userId      String
-  preferences String[] // allergies, dietary restrictions
+  userId      String   @unique
+  preferences String[] // vegan, vegetarian, keto, paleo, gluten_free, dairy_free
+  allergies   String[] // nuts, shellfish, dairy, eggs, soy
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
