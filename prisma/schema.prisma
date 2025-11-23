@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DietPlan {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  tags        String[] // vegan, vegetarian, keto, etc
+  createdAt   DateTime @default(now())
+}
+
+model DietPreference {
+  id          String   @id @default(uuid())
+  userId      String
+  preferences String[] // allergies, dietary restrictions
+  createdAt   DateTime @default(now())
+}
